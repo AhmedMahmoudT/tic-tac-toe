@@ -1,6 +1,6 @@
 # Tic Tac Toe
 
-#### A Simple 2-Player Tic Tac Toe Game Powered by Astro With a React.js Integration
+A Simple 2-Player Tic Tac Toe Game Powered by Astro With a React.js Integration
 
 ## 🧞 Commands
 
