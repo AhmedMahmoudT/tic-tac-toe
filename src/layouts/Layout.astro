@@ -1,0 +1,55 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body dir="rtl">
+    <slot />
+  </body>
+</html>
+<style is:global>
+  @font-face {
+    font-family: "PicNic";
+    src: url("/fonts/PicNic-Regular.woff") format("woff");
+    font-weight: normal;
+  }
+
+  @font-face {
+    font-family: "Clash Display";
+    src: url("/fonts/ClashDisplay-Medium.woff") format("woff");
+    font-weight: normal;
+  }
+
+  html {
+    background-size: 224px;
+    background-color: black;
+    color: #fef08a;
+  }
+
+  .xo {
+    font-family: "Clash Display";
+  } 
+
+  .title {
+    font-family: "PicNic";
+  }
+</style>
