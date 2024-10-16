@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import Box from "./Box";
+import { O, X } from "./XO";
+import { motion } from "framer-motion";
 
 const TicTacToe = () => {
   const [tictactoe, setT3] = useState(Array(9).fill(""));
@@ -27,7 +29,11 @@ const TicTacToe = () => {
         tictactoe[a] == tictactoe[b] &&
         tictactoe[b] == tictactoe[c]
       ) {
-        return tictactoe[a];
+        if (tictactoe[a]=="X"){
+          return <X scale={3} />
+        } else {
+          return <O scale={3} />
+        }
       }
     }
     return null;
@@ -75,12 +81,12 @@ const TicTacToe = () => {
 
   return (
     <div className="h-full">
-      {visible ? (
         <div>
-          <p className="text-8xl text-center mb-14 title select-none">
+          <motion.p initial={{y:'35vh'}} animate={visible?{y:0}:{y:'35vh'}} className="text-8xl text-center mb-14 title select-none">
             Tic Tac Toe
-          </p>
-          <div className="grid grid-cols-3 w-[600px] h-[600px] scale-[85%]">
+          </motion.p>
+
+          <motion.div initial={{opacity:0}} animate={visible?{opacity:1}:{opacity:0}} className="grid grid-cols-3 w-[600px] h-[600px] scale-[85%]">
             {tictactoe.map((t3, k) => {
               return (
                 <Box
@@ -91,8 +97,9 @@ const TicTacToe = () => {
                 />
               );
             })}
-          </div>
-          <div className="flex items-center justify-between mt-5">
+          </motion.div>
+
+          <motion.div initial={{opacity:0}} animate={visible?{opacity:1}:{opacity:0}} className="flex items-center justify-between mt-5">
             <p
               onClick={newGame}
               className="title text-4xl border-2 pb-2 px-4 border-yellow-200 text-center hover:bg-yellow-200 hover:text-black transition-all cursor-pointer"
@@ -104,15 +111,13 @@ const TicTacToe = () => {
             )}
             {winner && winner !== "Tie" && (
               <>
-                <p className="xo text-5xl ms-56">{winner}</p>
+                <p className="text-5xl ms-44">{winner}</p>
                 <p className="title text-4xl pb-2">:Winner</p>
               </>
             )}
-          </div>
+          </motion.div>
+
         </div>
-      ) : (
-        <p className="text-8xl title select-none">Tic Tac Toe</p>
-      )}
     </div>
   );
 };
