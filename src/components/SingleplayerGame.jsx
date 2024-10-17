@@ -8,7 +8,7 @@ import {
   RotatedLine, 
   VerticalLine } from "./Line";
 
-const TicTacToe = () => {
+const SingleplayerGame = () => {
   const [tictactoe, setT3] = useState(Array(9).fill(""));
   const [turn, setTurn] = useState("X");
   const [winner, setWinner] = useState(null);
@@ -49,7 +49,7 @@ const TicTacToe = () => {
   };
 
   const handleClick = (k) => {
-    if (tictactoe[k] == "" && checkWinner() === null) {
+    if (visible && tictactoe[k] == "" && checkWinner() === null) {
       const copyt3 = [...tictactoe];
       copyt3[k] = turn;
       setT3(copyt3);
@@ -137,7 +137,7 @@ const TicTacToe = () => {
           animate={visible ? { y: 0 } : { y: "35vh" }}
           className="text-8xl text-center mb-14 title select-none"
         >
-          Tic Tac Toe
+          <a href="/">Tic Tac Toe</a>
         </motion.p>
 
         <motion.div
@@ -192,4 +192,4 @@ const TicTacToe = () => {
   );
 };
 
-export default TicTacToe;
+export default SingleplayerGame;

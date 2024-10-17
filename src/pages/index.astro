@@ -1,11 +1,36 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
-
-import TicTacToe from "../components/TicTacToe";
+import singleplayerImage from "../../public/images/singleplayer.png";
+import multiplayerImage from "../../public/images/multiplayer.png";
 ---
 
 <Layout title="Tic Tac Toe">
-  <main class="flex min-h-screen justify-center items-center">
-      <TicTacToe client:load />
+  <main class="flex min-h-screen justify-center items-center select-none">
+    <div class="h-full flex flex-col items-center justify-center">
+      <div class="title text-8xl">Tic Tac Toe</div>
+      <div class="flex justify-center items-center gap-20 mt-20">
+        <div class="flex flex-col items-center justify-center">
+          <a href="/multiplayer">
+            <Image
+            src={multiplayerImage}
+            alt=""
+            class="border-4 border-[#FEF08A] hover:scale-110 transition-all"
+          />
+          </a>
+          <h1 class="text-7xl title mt-5">Vs. Friend</h1>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+          <a href="/singleplayer">
+            <Image
+            src={singleplayerImage}
+            alt=""
+            class="border-4 border-[#FEF08A] hover:scale-110 transition-all"
+          />
+          </a>
+          <h1 class="text-7xl title mt-5">Vs. Computer</h1>
+        </div>
+      </div>
+    </div>
   </main>
 </Layout>
