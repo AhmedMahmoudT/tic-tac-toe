@@ -133,8 +133,8 @@ const SingleplayerGame = () => {
     <div className="h-full">
       <div>
         <motion.p
-          initial={{ y: "35vh" }}
-          animate={visible ? { y: 0 } : { y: "35vh" }}
+          initial={{ y: "350px" }}
+          animate={visible ? { y: 0 } : { y: "350px" }}
           className="text-8xl text-center mb-14 title select-none"
         >
           <a href="/">Tic Tac Toe</a>
