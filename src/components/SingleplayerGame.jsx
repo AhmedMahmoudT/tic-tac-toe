@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import Box from "./Box";
 import { O, X } from "./XO";
 import { motion } from "framer-motion";
-import { 
-  // DrawLine, 
-  HorizontalLine, 
-  RotatedLine, 
-  VerticalLine } from "./Line";
+import {
+  // DrawLine,
+  HorizontalLine,
+  RotatedLine,
+  VerticalLine,
+} from "./Line";
 
 const SingleplayerGame = () => {
   const [tictactoe, setT3] = useState(Array(9).fill(""));
@@ -14,7 +15,7 @@ const SingleplayerGame = () => {
   const [winner, setWinner] = useState(null);
   const [visible, setVisible] = useState(false);
   const [gamesCount, setGamesCount] = useState(1);
-  const [winLine, setWinLine] = useState(null)
+  const [winLine, setWinLine] = useState(null);
 
   const wins = [
     [0, 1, 2],
@@ -27,9 +28,31 @@ const SingleplayerGame = () => {
     [2, 4, 6],
   ];
 
+  const scores = {
+    X: 1,
+    O: -1,
+    Draw: 0,
+  };
+  const minimax = (board, depth, isMaximizing) => {
+    let result = checkWinner();
+    if (result !== null) {
+      let score = scores[result];
+      return score;
+    }
+
+    if (isMaximizing){
+      for(let i=0; i<board.length; i++){
+        if (board[i]==""){
+          setT3((prev) => {
+            return prev.map((item, index) => (index === i ? "X" : item));
+          });
+        }
+      };
+    }
+  };
 
   const checkWinner = () => {
-      for (let i = 0; i < wins.length; i++) {
+    for (let i = 0; i < wins.length; i++) {
       const win = wins[i];
       const [a, b, c] = win;
       if (
@@ -38,11 +61,7 @@ const SingleplayerGame = () => {
         tictactoe[b] == tictactoe[c]
       ) {
         setWinLine(checkWinLine(win));
-        if (tictactoe[a] == "X") {
-          return <X />;
-        } else {
-          return <O />;
-        }
+        return tictactoe[a];
       }
     }
     return null;
@@ -80,44 +99,44 @@ const SingleplayerGame = () => {
     if (!winner && W !== winner) {
       setWinner(W);
     }
-    
+
     let count = 0;
     for (let box of tictactoe) {
       if (box !== "") {
         count++;
       }
     }
-  
+
     if (count === tictactoe.length && !W) {
       setWinner("Draw");
     }
-  }, [tictactoe]); 
+  }, [tictactoe]);
 
   const checkWinLine = (winIndex) => {
     switch (winIndex) {
       case wins[0]:
-        return <HorizontalLine margin={'top-[96px]'} />;
+        return <HorizontalLine margin={"top-[96px]"} />;
 
       case wins[1]:
-        return <HorizontalLine margin={'top-[296px]'} />;
+        return <HorizontalLine margin={"top-[296px]"} />;
 
       case wins[2]:
-        return <HorizontalLine margin={'top-[497px]'} />;
+        return <HorizontalLine margin={"top-[497px]"} />;
 
       case wins[3]:
-        return <VerticalLine margin={'left-[497px]'} />;
+        return <VerticalLine margin={"left-[497px]"} />;
 
       case wins[4]:
-        return <VerticalLine margin={'left-[296px]'} />;
+        return <VerticalLine margin={"left-[296px]"} />;
 
       case wins[5]:
-        return <VerticalLine margin={'left-[96px]'} />;
+        return <VerticalLine margin={"left-[96px]"} />;
 
       case wins[6]:
-        return <RotatedLine from={'left'} />;
+        return <RotatedLine from={"left"} />;
 
       case wins[7]:
-        return <RotatedLine from={'right'} />;
+        return <RotatedLine from={"right"} />;
 
       default:
         // return <DrawLine />;
@@ -127,7 +146,7 @@ const SingleplayerGame = () => {
 
   const showWinLine = () => {
     return winLine;
-  }
+  };
 
   return (
     <div className="h-full">
@@ -145,9 +164,7 @@ const SingleplayerGame = () => {
           animate={visible ? { opacity: 1 } : { opacity: 0 }}
           className="absolute left-20 flex text-6xl title items-center justify-center mt-5"
         >
-          <div className="mt-5">
-            {turn == "X" ? <X /> : <O />}
-          </div>
+          <div className="mt-5">{turn == "X" ? <X /> : <O />}</div>
           <p className="ms-10">:Turn</p>
         </motion.div>
 
@@ -161,9 +178,7 @@ const SingleplayerGame = () => {
               <Box key={k} num={k} value={t3} onClick={() => handleClick(k)} />
             );
           })}
-          {winner&&(
-            showWinLine()
-          )}
+          {winner && showWinLine()}
         </motion.div>
 
         <motion.div
@@ -182,7 +197,7 @@ const SingleplayerGame = () => {
           )}
           {winner && winner !== "Draw" && (
             <>
-              <p className="text-5xl ms-44">{winner}</p>
+              <p className="text-5xl ms-44">{winner=="X"?<X/>:<O/>}</p>
               <p className="title text-4xl pb-2">:Winner</p>
             </>
           )}
