@@ -2,7 +2,8 @@
 
 A Simple 2-Player Tic Tac Toe Game Powered by Astro With a React.js Integration.
 
-Planning to add Single Player Mode soon...
+Added Dumb Computer Mode 👍
+**Hard Mode** Coming soon ⌛
 
 ## 🧞 Commands
 
