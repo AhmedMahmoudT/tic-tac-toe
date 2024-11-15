@@ -12,6 +12,7 @@ import {
 const SingleplayerGame = () => {
   const [tictactoe, setT3] = useState(Array(9).fill(""));
   const [turn, setTurn] = useState("X");
+  const [isComTurn, setIsComTurn] = useState(null);
   const [winner, setWinner] = useState(null);
   const [visible, setVisible] = useState(false);
   const [gamesCount, setGamesCount] = useState(1);
@@ -27,29 +28,6 @@ const SingleplayerGame = () => {
     [0, 4, 8],
     [2, 4, 6],
   ];
-
-  const scores = {
-    X: 1,
-    O: -1,
-    Draw: 0,
-  };
-  const minimax = (board, depth, isMaximizing) => {
-    let result = checkWinner();
-    if (result !== null) {
-      let score = scores[result];
-      return score;
-    }
-
-    if (isMaximizing){
-      for(let i=0; i<board.length; i++){
-        if (board[i]==""){
-          setT3((prev) => {
-            return prev.map((item, index) => (index === i ? "X" : item));
-          });
-        }
-      };
-    }
-  };
 
   const checkWinner = () => {
     for (let i = 0; i < wins.length; i++) {
@@ -72,13 +50,95 @@ const SingleplayerGame = () => {
       const copyt3 = [...tictactoe];
       copyt3[k] = turn;
       setT3(copyt3);
-      if (turn == "X") {
-        setTurn("O");
-      } else {
-        setTurn("X");
-      }
+      setIsComTurn(copyt3);
     }
   };
+
+  const computerTurn = (t3) => {
+    if (winner == null) {
+      let availableMoves = [];
+      for (let index = 0; index < t3.length; index++) {
+        if (t3[index] === "") {
+          availableMoves.push(index);
+        }
+      }
+      const move =
+        availableMoves[Math.floor(Math.random() * availableMoves.length)];
+      const newT3 = [...t3];
+      newT3[move] = turn == "X" ? "O" : "X";
+      setT3(newT3);
+      console.log(availableMoves, move);
+      setIsComTurn(null);
+    }
+  };
+
+  useEffect(() => {
+    if (isComTurn && checkWinner() === null) {
+      computerTurn(isComTurn);
+      console.log('test')
+    }
+  }, [isComTurn]);
+
+  useEffect(() => {
+    if (turn === "O") {
+      setIsComTurn(Array(9).fill(""));
+      console.log('test')
+    }
+  }, [turn]);
+
+  const scores = {
+    X: -1,
+    O: 1,
+    tie: 0,
+  };
+
+  function bestMove(tictactoe) {
+    // AI turn
+    let bestScore = -Infinity;
+    let moveIndex;
+    for (let i = 0; i < tictactoe.length; i++) {
+      // is spot available
+      if (tictactoe[i] === null) {
+        const t3Copy = [...tictactoe];
+        t3Copy[i] = turn == "O" ? "X" : "O"; // AI
+        let score = minimax(t3Copy, 0, false);
+        if (score > bestScore) {
+          bestScore = score;
+          moveIndex = i;
+        }
+      }
+    }
+    return moveIndex;
+  }
+
+  function getBestScore(board, depth, isMax, player) {
+    let bestScore = isMax ? -Infinity : Infinity;
+    for (let i = 0; i < board.length; i++) {
+      // is spot available
+      if (board[i] === null) {
+        const boardCopy = [...board];
+        boardCopy[i] = player;
+        let score = minimax(boardCopy, depth + 1, !isMax);
+        bestScore = isMax
+          ? Math.max(score, bestScore)
+          : Math.min(score, bestScore);
+      }
+    }
+    return bestScore;
+  }
+
+  function minimax(board, depth, isMax) {
+    let result = checkWinner(board, () => {});
+    if (result) {
+      return scores[result];
+    }
+
+    if (isMax) {
+      return getBestScore(board, depth, isMax, "O");
+    } else {
+      return getBestScore(board, depth, isMax, "X");
+    }
+  }
 
   const newGame = () => {
     setTurn(gamesCount % 2 == 0 ? "X" : "O");
@@ -150,7 +210,8 @@ const SingleplayerGame = () => {
 
   return (
     <div className="h-full">
-      <div>
+      <div className="me-[700px]">
+        {/* hange the ms (margin-start) once the hard mode is added */}
         <motion.p
           initial={{ y: "350px" }}
           animate={visible ? { y: 0 } : { y: "350px" }}
@@ -165,8 +226,17 @@ const SingleplayerGame = () => {
           className="absolute left-20 flex text-6xl title items-center justify-center mt-5"
         >
           <div className="mt-5">{turn == "X" ? <X /> : <O />}</div>
-          <p className="ms-10">:Turn</p>
+          <p className="ms-10">:You're</p>
         </motion.div>
+
+        <div
+          className="absolute left-10 bottom-14 text-5xl title mt-32 flex flex-col text-end"
+        >
+          <p>...This Computer is kinda dumb</p>
+          <p>,don't worry though</p>
+          <p>!<span className="font-black text-6xl">Hard</span> mode is coming soon</p>
+          <p className="text-4xl mt-6">(😊 It'll be <span className="text-5xl font-black">S0</span> hard that you'll never win)</p>
+        </div>
 
         <motion.div
           initial={{ opacity: 0 }}
@@ -197,7 +267,7 @@ const SingleplayerGame = () => {
           )}
           {winner && winner !== "Draw" && (
             <>
-              <p className="text-5xl ms-44">{winner=="X"?<X/>:<O/>}</p>
+              <p className="text-5xl ms-44">{winner == "X" ? <X /> : <O />}</p>
               <p className="title text-4xl pb-2">:Winner</p>
             </>
           )}
