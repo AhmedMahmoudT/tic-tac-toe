@@ -1,19 +1,15 @@
 ---
-import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
-import singleplayerImage from "../../public/images/singleplayer.png";
-import multiplayerImage from "../../public/images/multiplayer.png";
 ---
-
-<Layout title="Tic Tac Toe">
+<Layout title="TicTacToe">
   <main class="flex min-h-screen justify-center items-center select-none">
     <div class="h-full flex flex-col items-center justify-center">
       <div class="title text-8xl">Tic Tac Toe</div>
       <div class="flex justify-center items-center gap-20 mt-20">
         <div class="flex flex-col items-center justify-center">
           <a href="/multiplayer">
-            <Image
-            src={multiplayerImage}
+            <img
+            src={"https://utfs.io/f/cqLSAoB0L6NSGWus774GEgeI7tpzNCmQnqLZwDs0hOVbxJUX"}
             alt=""
             class="border-4 border-[#FEF08A] hover:scale-110 transition-all"
           />
@@ -22,8 +18,8 @@ import multiplayerImage from "../../public/images/multiplayer.png";
         </div>
         <div class="flex flex-col items-center justify-center">
           <a href="/singleplayer">
-            <Image
-            src={singleplayerImage}
+            <img
+            src={"https://utfs.io/f/cqLSAoB0L6NSBKlAxahvM3PzHEtTiIbla4sr5xdeR9fJy7mL"}
             alt=""
             class="border-4 border-[#FEF08A] hover:scale-110 transition-all"
           />
