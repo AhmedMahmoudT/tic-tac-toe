@@ -55,22 +55,31 @@ const SingleplayerGame = () => {
   };
 
   const computerTurn = (t3) => {
-    if (winner == null) {
-      let availableMoves = [];
-      for (let index = 0; index < t3.length; index++) {
-        if (t3[index] === "") {
-          availableMoves.push(index);
-        }
+  if (winner == null) {
+    let availableMoves = [];
+    for (let index = 0; index < t3.length; index++) {
+      if (t3[index] === "") {
+        availableMoves.push(index);
       }
-      const move =
-        availableMoves[Math.floor(Math.random() * availableMoves.length)];
+    }
+
+    if (availableMoves.length > 0) {
+      const crypto = window.crypto || window.msCrypto; // Ensure compatibility
+      const randomValues = new Uint32Array(1);
+      crypto.getRandomValues(randomValues);
+
+      const move = availableMoves[randomValues[0] % availableMoves.length];
+
       const newT3 = [...t3];
-      newT3[move] = turn == "X" ? "O" : "X";
+      newT3[move] = turn === "X" ? "O" : "X";
       setT3(newT3);
+
       console.log(availableMoves, move);
       setIsComTurn(null);
     }
-  };
+  }
+};
+
 
   useEffect(() => {
     if (isComTurn && checkWinner() === null) {
@@ -86,59 +95,59 @@ const SingleplayerGame = () => {
     }
   }, [turn]);
 
-  const scores = {
-    X: -1,
-    O: 1,
-    tie: 0,
-  };
+  // const scores = {
+  //   X: -1,
+  //   O: 1,
+  //   tie: 0,
+  // };
 
-  function bestMove(tictactoe) {
-    // AI turn
-    let bestScore = -Infinity;
-    let moveIndex;
-    for (let i = 0; i < tictactoe.length; i++) {
-      // is spot available
-      if (tictactoe[i] === null) {
-        const t3Copy = [...tictactoe];
-        t3Copy[i] = turn == "O" ? "X" : "O"; // AI
-        let score = minimax(t3Copy, 0, false);
-        if (score > bestScore) {
-          bestScore = score;
-          moveIndex = i;
-        }
-      }
-    }
-    return moveIndex;
-  }
+  // function bestMove(tictactoe) {
+  //   // AI turn
+  //   let bestScore = -Infinity;
+  //   let moveIndex;
+  //   for (let i = 0; i < tictactoe.length; i++) {
+  //     // is spot available
+  //     if (tictactoe[i] === null) {
+  //       const t3Copy = [...tictactoe];
+  //       t3Copy[i] = turn == "O" ? "X" : "O"; // AI
+  //       let score = minimax(t3Copy, 0, false);
+  //       if (score > bestScore) {
+  //         bestScore = score;
+  //         moveIndex = i;
+  //       }
+  //     }
+  //   }
+  //   return moveIndex;
+  // }
 
-  function getBestScore(board, depth, isMax, player) {
-    let bestScore = isMax ? -Infinity : Infinity;
-    for (let i = 0; i < board.length; i++) {
-      // is spot available
-      if (board[i] === null) {
-        const boardCopy = [...board];
-        boardCopy[i] = player;
-        let score = minimax(boardCopy, depth + 1, !isMax);
-        bestScore = isMax
-          ? Math.max(score, bestScore)
-          : Math.min(score, bestScore);
-      }
-    }
-    return bestScore;
-  }
+  // function getBestScore(board, depth, isMax, player) {
+  //   let bestScore = isMax ? -Infinity : Infinity;
+  //   for (let i = 0; i < board.length; i++) {
+  //     // is spot available
+  //     if (board[i] === null) {
+  //       const boardCopy = [...board];
+  //       boardCopy[i] = player;
+  //       let score = minimax(boardCopy, depth + 1, !isMax);
+  //       bestScore = isMax
+  //         ? Math.max(score, bestScore)
+  //         : Math.min(score, bestScore);
+  //     }
+  //   }
+  //   return bestScore;
+  // }
 
-  function minimax(board, depth, isMax) {
-    let result = checkWinner(board, () => {});
-    if (result) {
-      return scores[result];
-    }
+  // function minimax(board, depth, isMax) {
+  //   let result = checkWinner(board, () => {});
+  //   if (result) {
+  //     return scores[result];
+  //   }
 
-    if (isMax) {
-      return getBestScore(board, depth, isMax, "O");
-    } else {
-      return getBestScore(board, depth, isMax, "X");
-    }
-  }
+  //   if (isMax) {
+  //     return getBestScore(board, depth, isMax, "O");
+  //   } else {
+  //     return getBestScore(board, depth, isMax, "X");
+  //   }
+  // }
 
   const newGame = () => {
     setTurn(gamesCount % 2 == 0 ? "X" : "O");
